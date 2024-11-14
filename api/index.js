@@ -30,11 +30,11 @@ app.use('/api/auth',userAuthRouter )
 
 //middlware
 app.use((err, req, res, next)=>{
-    const statuCode = err.statuCode || 500;
+    const statusCode = err.statuCode || 500;
     const message = err.message || "Internal Server Error";
-    return res.status(statuCode).json({
+    return res.status(statusCode).json({
         success : false,
-        statuCode,
+        statusCode,
         message
     })
 })
