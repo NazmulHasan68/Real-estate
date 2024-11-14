@@ -31,7 +31,7 @@ function Signin() {
       dispatch(signFailure(data.message))
       return
     }
-    dispatch(signSuccess(data.user))
+    dispatch(signSuccess(data))
     navigate('/')
 
     } catch (error) {

@@ -31,7 +31,7 @@ export const signincontroller = async (req, res, next) => {
         
         res.cookie('access_token', token, { httpOnly: true })
            .status(200)
-           .json({ success: true, user: rest });
+           .json({ success: true, rest });
     } catch (error) {
         next(error);
     }
