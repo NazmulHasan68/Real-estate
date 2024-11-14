@@ -2,7 +2,7 @@ import User from "../models/user.Model.js";
 import bcryptjs from 'bcryptjs'
 
 
-export const singupController = async(req, res)=>{
+export const singupController = async(req, res, next)=>{
     try {
         const {username , email, password} = req.body;
         const hashedPassword = bcryptjs.hashSync(password, 10)
@@ -11,6 +11,6 @@ export const singupController = async(req, res)=>{
         res.status(200).json({message : "user created successfully"})
         
     } catch (error) {
-        res.status(500).json(error.message)
+        next(error)
     }
 }

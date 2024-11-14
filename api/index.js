@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { json } from 'express'
 import mongoose from 'mongoose';
 
 // connected to the mongoDB
@@ -27,3 +27,14 @@ import userRouter from './routes/user.route.js'
 import userAuthRouter from './routes/auth.route.js'
 app.use('/api/user',userRouter)
 app.use('/api/auth',userAuthRouter )
+
+//middlware
+app.use((err, req, res, next)=>{
+    const statuCode = err.statuCode || 500;
+    const message = err.message || "Internal Server Error";
+    return res.status(statuCode).json({
+        success : false,
+        statuCode,
+        message
+    })
+})
