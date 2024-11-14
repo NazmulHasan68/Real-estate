@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Link , useNavigate} from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { signFailure, signInStart, signSuccess } from "../redux/user/userSlice";
 function Signin() {
   const [formData, setFormData] = useState({})
-  const [error , setError] = useState(null)
-  const [Loading, setLoading] = useState(false)
+  const {loading, error} = useSelector((state)=>state.user)
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const handlechange = (e)=>{
     setFormData({
@@ -16,7 +18,7 @@ function Signin() {
   const handleSumite = async(e) =>{
     e.preventDefault()
     try {
-      setLoading(true)
+      dispatch(signInStart())
     const res = await fetch('/api/auth/signin',{
       method : "POST",
       headers : {
@@ -26,19 +28,16 @@ function Signin() {
     })
     const data = await res.json()
     if(data.success === false){
-      setError(data.message)
-      setLoading(false)
+      dispatch(signFailure(data.message))
       return
     }
-    setLoading(false)
-    setError(null)
+    dispatch(signSuccess(data.user))
     navigate('/')
 
     } catch (error) {
-      setLoading(false)
-      setError(error.message)
+     dispatch(signFailure(error.message))
+
     }
-    setLoading(false)
   }
   
   return (
@@ -53,6 +52,7 @@ function Signin() {
           className="border p-3 rounded-lg"
           id="email"
           onChange={handlechange}
+          required
         />
         <input
           type="password"
@@ -60,9 +60,10 @@ function Signin() {
           className="border p-3 rounded-lg"
           id="password"
           onChange={handlechange}
+          required
         />
-        <button disabled={Loading} className="bg-slate-600 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
-          {Loading? 'Loading...' : 'Sign in'}
+        <button disabled={loading} className="bg-slate-600 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
+          {loading? 'Loading...' : 'Sign in'}
         </button>
       </form>
       <div className="flex gap-2 mt-4">
@@ -72,7 +73,7 @@ function Signin() {
         </Link>
       </div>
       {
-        error && <p>{error}</p>
+        error && <p className="text-red-500">{error}</p>
       }
     </div>
   );

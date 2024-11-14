@@ -79,7 +79,7 @@ function Signup() {
         </Link>
       </div>
       {
-        error && <p>{error}</p>
+        error && <p className="text-red-500">{error}</p>
       }
     </div>
   );
