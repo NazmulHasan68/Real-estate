@@ -8,7 +8,7 @@ export default function Header() {
             <Link to={'/'}>
                 <img src={logo} alt="logo" className="h-8 sm:h-10" />
             </Link>
-            <form className="bg-sky-100 p-3 rounded-lg flex items-center">
+            <form className="bg-sky-100 p-2 rounded-lg flex items-center">
                 <input
                 type="text"
                 placeholder="Search..."

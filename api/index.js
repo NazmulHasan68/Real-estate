@@ -1,5 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose';
+
+// connected to the mongoDB
 import dotenv from 'dotenv'
 dotenv.config()
 try {
@@ -8,6 +10,7 @@ try {
 } catch (error) {
     console.log("Database is not connected");
 }
+// connected to the mongoDB
 
 
 const app = express()
