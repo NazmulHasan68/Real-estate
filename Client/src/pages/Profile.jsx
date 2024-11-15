@@ -120,16 +120,25 @@ function Profile() {
     };
 
     //signout
-    const handleLout = async()=>{
+    const handleLogout = async (id) => {
       try {
-        localStorage.removeItem('access_token');  // Or sessionStorage.removeItem('access_token');
-        window.location.href = '/sign-in'; 
-        console.log('User deleted successfully');
-        dispatch(signSuccess(null));
+        const res = await fetch(`/api/user/logout/${id}`, {
+          method: 'POST', 
+        });
+    
+        if (res.ok) {
+          localStorage.removeItem('access_token'); 
+          dispatch(signSuccess(null));
+          window.location.href = '/sign-in';
+          console.log('User logged out successfully');
+        } else {
+          console.error('Failed to logout');
+        }
       } catch (error) {
-        console.error('Error logout user:', error);
+        console.error('Error logging out user:', error);
       }
-    }
+    };
+    
     
 
   return (
@@ -191,7 +200,7 @@ function Profile() {
           <span className="text-red-700 cursor-pointer" onClick={() => handleDeleteUser(currentUser?._id)}>
             Delete Account
           </span>
-          <span className="text-red-700 cursor-pointer" onClick={()=>handleLout()}>Sign Out</span>
+          <span className="text-red-700 cursor-pointer" onClick={() => handleLogout(currentUser?._id)}>Sign Out</span>
         </div>
       </div>
     </div>

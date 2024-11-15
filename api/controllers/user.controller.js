@@ -32,3 +32,17 @@ export const userdeleteController = async(req, res, next)=>{
       next()  
     }
 }
+
+
+export const userlogoutController = async(req, res, next)=>{
+    if(req.user.id !== req.params.id){
+        return next(errorHandler(401, 'Only delete your own account!'))
+    }
+    try {
+        res.clearCookie('access_token', { httpOnly: true, path: '/' });
+        res.status(200).json({message : "User logout suucessfully"})
+    } catch (error) {
+      next()  
+    }
+}
+
