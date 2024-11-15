@@ -32,7 +32,8 @@ function Signin() {
       dispatch(signFailure(data.message))
       return
     }
-    dispatch(signSuccess(data))
+
+    dispatch(signSuccess(data.rest))
     navigate('/')
 
     } catch (error) {

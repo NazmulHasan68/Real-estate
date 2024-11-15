@@ -1,9 +1,16 @@
-import express from 'express'
-import {googlecontroller, signincontroller, singupController } from '../controllers/auth.controller.js'
-const router = express.Router()
+import express from "express";
+import upload from "../utills/multer.js";
+import {
+  googleController,
+  signinController,
+  signupController,
+  updateProfileController,
+} from "../controllers/auth.controller.js";
+const router = express.Router();
 
-router.post('/signup', singupController)
-router.post('/signin', signincontroller)
-router.post('/google', googlecontroller)
+router.post("/signup", signupController);
+router.post("/signin", signinController);
+router.post("/google", googleController);
+router.put("/updateProfile", upload.single("image"), updateProfileController);
 
-export default router
+export default router;
