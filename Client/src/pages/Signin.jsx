@@ -32,8 +32,6 @@ function Signin() {
       dispatch(signFailure(data.message))
       return
     }
-
-    console.log(data.user);
     
     dispatch(signSuccess(data.user))
     navigate('/')

@@ -1,5 +1,6 @@
 import express, { json } from 'express'
 import mongoose from 'mongoose';
+import cookieParser from 'cookie-parser';
 
 // connected to the mongoDB
 import dotenv from 'dotenv'
@@ -14,8 +15,12 @@ try {
 
 
 const app = express()
+
 // allow json as inport 
 app.use(express.json())
+
+//allow cookiz 
+app.use(cookieParser())
 
 
 app.listen(3000, ()=>{

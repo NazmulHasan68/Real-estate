@@ -77,7 +77,7 @@ export const googleController = async (req, res, next) => {
 };
 
 
-//update image
+//update image and user
 export const updateProfileController = async (req, res, next) => {
     const { username, email, password, avatar } = req.body;
     

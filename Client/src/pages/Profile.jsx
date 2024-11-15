@@ -98,6 +98,40 @@ function Profile() {
     }
   };
 
+
+    //delete user account 
+    const handleDeleteUser = async (id) => {
+      try {
+        const res = await fetch(`/api/user/delete/${id}`, {
+          method: 'DELETE',
+        });
+    
+        if (res.ok) {
+          localStorage.removeItem('access_token');  // Or sessionStorage.removeItem('access_token');
+          window.location.href = '/'; 
+          console.log('User deleted successfully');
+          dispatch(signSuccess(null));
+        } else {
+          console.error('Failed to delete user');
+        }
+      } catch (error) {
+        console.error('Error deleting user:', error);
+      }
+    };
+
+    //signout
+    const handleLout = async()=>{
+      try {
+        localStorage.removeItem('access_token');  // Or sessionStorage.removeItem('access_token');
+        window.location.href = '/sign-in'; 
+        console.log('User deleted successfully');
+        dispatch(signSuccess(null));
+      } catch (error) {
+        console.error('Error logout user:', error);
+      }
+    }
+    
+
   return (
     <div className="max-w-6xl mx-auto flex justify-between items-center flex-col sm:flex-row sm:mt-4">
       <div className="flex-1 w-[90%] sm:w-full">
@@ -154,8 +188,10 @@ function Profile() {
           </button>
         </form>
         <div className="flex justify-between mt-4 p-1">
-          <span className="text-red-700 cursor-pointer">Delete Account</span>
-          <span className="text-red-700 cursor-pointer">Sign Out</span>
+          <span className="text-red-700 cursor-pointer" onClick={() => handleDeleteUser(currentUser?._id)}>
+            Delete Account
+          </span>
+          <span className="text-red-700 cursor-pointer" onClick={()=>handleLout()}>Sign Out</span>
         </div>
       </div>
     </div>
