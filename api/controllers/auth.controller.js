@@ -77,10 +77,7 @@ export const googleController = async (req, res, next) => {
 };
 
 
-
-
-
-
+//update image
 export const updateProfileController = async (req, res, next) => {
     const { username, email, password, avatar } = req.body;
     
@@ -93,8 +90,15 @@ export const updateProfileController = async (req, res, next) => {
         if (username) user.username = username;
         if (email) user.email = email;
         if (password) user.password = await bcryptjs.hash(password, 10);
+        
+        try {
+            const publicId = user.avatar.split('/').pop().split('.')[0];
+            const deleteResult = await cloudinary.uploader.destroy(publicId)
+        } catch (error) {
+            if(!deleteResult) console.log("failure to deleted image");
+        }
+        
         if(avatar) user.avatar = avatar
-
 
         await user.save();
         res.status(200).json({ message: "Profile updated successfully", user });

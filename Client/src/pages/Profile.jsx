@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 import profile from "../assets/profile.png";
 import { useRef, useState, useEffect } from "react";
-import { signSuccess } from "../redux/user/userSlice";
+import { signFailure, signInStart, signSuccess } from "../redux/user/userSlice";
 
 function Profile() {
   const fileRef = useRef(null);
-  const { currentUser } = useSelector((state) => state.user);
+  const {loading, currentUser ,error} = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
@@ -46,8 +46,9 @@ function Profile() {
       const data = new FormData();
       data.append("file", formData.image);
       data.append("upload_preset", "realestate"); // Replace with your Cloudinary preset
-
+ 
       try {
+        dispatch(signInStart())
         const uploadResponse = await fetch(
           "https://api.cloudinary.com/v1_1/dpn0fjl8h/image/upload", // Replace with your Cloudinary URL
           {
@@ -77,6 +78,7 @@ function Profile() {
     }
 
     try {
+      
       const response = await fetch("/api/auth/updateProfile", {
         method: "PUT",
         headers: {
@@ -91,9 +93,8 @@ function Profile() {
 
       const result = await response.json();
       dispatch(signSuccess(result.user));
-      console.log("Profile updated successfully:", result.user);
     } catch (error) {
-      console.error("Error updating profile:", error);
+      dispatch(signFailure(error.message))
     }
   };
 
@@ -119,6 +120,11 @@ function Profile() {
             alt="profile"
             className="rounded-full h-24 w-24 object-cover self-center my-2 cursor-pointer"
           />
+          <div>
+            {
+              error && <div className="text-red-500 text-xs">{error}</div>
+            }
+          </div>
           <input
             type="text"
             name="username"
@@ -143,8 +149,8 @@ function Profile() {
             onChange={handleChange}
             value={formData.password}
           />
-          <button className="bg-slate-800 text-white rounded-lg p-3 hover:opacity-95 disabled:opacity-80">
-            Update
+          <button disabled={loading} className="bg-slate-800 text-white rounded-lg p-3 hover:opacity-95 disabled:opacity-80">
+            {loading? 'Loading...' : 'Update'}
           </button>
         </form>
         <div className="flex justify-between mt-4 p-1">

@@ -33,7 +33,9 @@ function Signin() {
       return
     }
 
-    dispatch(signSuccess(data.rest))
+    console.log(data.user);
+    
+    dispatch(signSuccess(data.user))
     navigate('/')
 
     } catch (error) {
