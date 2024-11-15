@@ -1,6 +1,7 @@
 import express, { json } from 'express'
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 // connected to the mongoDB
 import dotenv from 'dotenv'
@@ -21,6 +22,9 @@ app.use(express.json())
 
 //allow cookiz 
 app.use(cookieParser())
+
+// Enable CORS
+app.use(cors());
 
 
 app.listen(3000, ()=>{

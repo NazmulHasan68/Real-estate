@@ -11,3 +11,4 @@ cloudinary.config({
 
 // Export the configured cloudinary instance for use in other parts of the app
 export default cloudinary;
+
