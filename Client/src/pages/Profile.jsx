@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import profile from "../assets/profile.png";
 import { useRef, useState, useEffect } from "react";
 import { signFailure, signInStart, signSuccess } from "../redux/user/userSlice";
+import {Link} from 'react-router-dom'
 
 function Profile() {
   const fileRef = useRef(null);
@@ -195,9 +196,9 @@ function Profile() {
           <button disabled={loading} className="bg-slate-800 text-white rounded-lg p-3 hover:opacity-95 disabled:opacity-80">
             {loading? 'Loading...' : 'Update'}
           </button>
-          <button className="bg-teal-800 text-white rounded-lg p-3 hover:opacity-95 disabled:opacity-80">
+          <Link to={'/create-listing'} className="bg-sky-800 text-center text-white rounded-lg p-3 hover:opacity-95 disabled:opacity-80">
             Create Listing
-          </button>
+          </Link>
         </form>
         <div className="flex justify-between mt-4 p-1">
           <span className="text-red-700 cursor-pointer" onClick={() => handleDeleteUser(currentUser?._id)}>
