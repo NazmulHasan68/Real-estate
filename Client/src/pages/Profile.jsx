@@ -195,6 +195,9 @@ function Profile() {
           <button disabled={loading} className="bg-slate-800 text-white rounded-lg p-3 hover:opacity-95 disabled:opacity-80">
             {loading? 'Loading...' : 'Update'}
           </button>
+          <button className="bg-teal-800 text-white rounded-lg p-3 hover:opacity-95 disabled:opacity-80">
+            Create Listing
+          </button>
         </form>
         <div className="flex justify-between mt-4 p-1">
           <span className="text-red-700 cursor-pointer" onClick={() => handleDeleteUser(currentUser?._id)}>

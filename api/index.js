@@ -30,8 +30,10 @@ app.listen(3000, ()=>{
 //api 
 import userRouter from './routes/user.route.js'
 import userAuthRouter from './routes/auth.route.js'
+import listingRouter from './routes/listing.route.js'
 app.use('/api/user',userRouter)
 app.use('/api/auth',userAuthRouter )
+app.use('/api/listing',listingRouter )
 
 //middlware
 app.use((err, req, res, next)=>{
