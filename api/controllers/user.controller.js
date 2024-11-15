@@ -1,6 +1,7 @@
 import User from "../models/user.Model.js";
 import { errorHandler } from "../utills/error.js";
 import cloudinary from 'cloudinary'; 
+import Listiing from '../models/listing.model.js'
 
 export const userController = async(req, res)=>{
     try {
@@ -43,6 +44,20 @@ export const userlogoutController = async(req, res, next)=>{
         res.status(200).json({message : "User logout suucessfully"})
     } catch (error) {
       next()  
+    }
+}
+
+
+export const getuserlistingController = async(req, res, next) =>{
+    if(req.user.id == req.params.id){
+        try {
+            const listngs = await Listiing.find({userRef:req.params.id})
+            res.status(200).json(listngs)
+        } catch (error) {
+            next(error)
+        }
+    }else{
+        return next(errorHandler(401, "You can only view your own listing"))
     }
 }
 
