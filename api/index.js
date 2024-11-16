@@ -2,8 +2,8 @@ import express, { json } from 'express'
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-
-import path from 'path'
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 // connected to the mongoDB
 import dotenv from 'dotenv'
@@ -19,7 +19,8 @@ try {
 
 
 //directoryname
-const __direname = path.resolve()
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+console.log(__dirname);
 
 
 const app = express()
@@ -48,7 +49,7 @@ app.use('/api/auth',userAuthRouter )
 app.use('/api/listing',listingRouter )
 
 
-app.use(express.static(path.json(__direname, '/client/dist')))
+app.use(express.static(path.join(__dirname, 'client', 'dist')));
 app.get('*',(req, res)=>{
     res.sendFile(path.join(__direname, 'client', 'dist', 'index.html'))
 })
