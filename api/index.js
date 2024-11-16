@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
+import path from 'path'
+
 // connected to the mongoDB
 import dotenv from 'dotenv'
 dotenv.config()
@@ -13,6 +15,11 @@ try {
     console.log("Database is not connected");
 }
 // connected to the mongoDB
+
+
+
+//directoryname
+const __direname = path.resolve()
 
 
 const app = express()
@@ -27,6 +34,7 @@ app.use(cookieParser())
 app.use(cors());
 
 
+
 app.listen(3000, ()=>{
     console.log('Server is running on port 3000!');
 })
@@ -38,6 +46,12 @@ import listingRouter from './routes/listing.route.js'
 app.use('/api/user',userRouter)
 app.use('/api/auth',userAuthRouter )
 app.use('/api/listing',listingRouter )
+
+
+app.use(express.static(path.json(__direname, '/client/dist')))
+app.get('*',(req, res)=>{
+    res.sendFile(path.join(__direname, 'client', 'dist', 'index.html'))
+})
 
 //middlware
 app.use((err, req, res, next)=>{
