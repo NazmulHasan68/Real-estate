@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
+import { useSelector } from "react-redux";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore from 'swiper'
 import { Navigation } from "swiper/modules";
@@ -10,15 +11,18 @@ import { FaBed } from "react-icons/fa";
 import { FaBath } from "react-icons/fa";
 import { FaParking } from "react-icons/fa";
 import { FaChair } from "react-icons/fa";
+import Contact from "../components/Contact";
 
 
 
 export default function Listing() {
+    const {currentUser} = useSelector((state)=>state.user)
     SwiperCore.use({Navigation})
     const params = useParams()
     const [listing, setListing] = useState(null)
     const [loading, setloading] = useState(false)
     const [error, seterror] = useState(false)
+    const [contact, setcontact] = useState(false)
     useEffect(()=>{
         const fetchlisting = async() =>{
            try {
@@ -42,8 +46,7 @@ export default function Listing() {
         }
         fetchlisting()
     },[params.listingId])
-    console.log(listing);
-    
+ 
   return (
     <main className=" mx-auto">
         {loading && <p className="text-center py-7 text-2xl">Loading...</p>}
@@ -117,7 +120,12 @@ export default function Listing() {
                     <p>{listing.furnished ? "Furnished" : "Not Furnished"}</p>
                 </div>
               </div>
-              
+              {contact && <Contact listing={listing}/>}
+              {currentUser && listing.userRef !== currentUser._id && (
+                 <div className="px-4 py-5">
+                    {!contact && (<button onClick={()=>setcontact(true)} className="bg-slate-800 text-white font-semibold w-full text-center p-3 rounded-lg cursor-pointer hover:opacity-95">Contact LandLoad</button>)}
+                </div>
+              )}
           </div>
         </>
       )}
