@@ -85,7 +85,6 @@ export default function Search() {
   
   const onShowMoreClick = async()=>{
     const numberOfListings = listing.length;
-
     const startIndex = numberOfListings
     const urlParams = new URLSearchParams(location.search)
 
@@ -94,7 +93,9 @@ export default function Search() {
     const res = await fetch(`/api/listing/getsearch?${searchQuery}`)
     const data = await res.json()
 
-    if(data.length < 8){
+    if(data.length > 8){
+      setshowMore(true)
+    }else{
       setshowMore(false)
     }
     setListing([...listing, ...data])
