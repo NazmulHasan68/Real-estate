@@ -154,15 +154,37 @@ function Profile() {
         }
         setuserlisting(data)
         setshowlistingError(false)
+        
       } catch (error) {
         console.log(error.message);
         setshowlistingError(true)
       }
     }
     
-    console.log(userlisting);
     
-    
+  // Delete listing
+  const handleDeleteListing = async (id) => {
+  try {
+    // Send DELETE request to your API
+    const res = await fetch(`/api/listing/delete/${id}`, {
+      method: 'DELETE',
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.message || 'Failed to delete listing');
+    }
+
+    const result = await res.json();
+    handleshowlisting()
+    console.log('Listing deleted successfully:', result.message);
+
+  } catch (error) {
+    console.error('Error deleting listing:', error.message);
+  }
+};
+
+
 
   return (
     <div className="max-w-6xl mx-auto flex justify-between items-start flex-col sm:flex-row sm:mt-4">
@@ -245,7 +267,7 @@ function Profile() {
                   </Link>
                   <div className="flex flex-col items-center gap-1">
                       <button className="text-green-700 hover:font-semibold">Edit</button>
-                      <button className="text-red-700 hover:font-semibold">Delete</button>
+                      <button className="text-red-700 hover:font-semibold" onClick={()=>handleDeleteListing(listing._id)}>Delete</button>
                   </div>
                 </div>
               ))}
