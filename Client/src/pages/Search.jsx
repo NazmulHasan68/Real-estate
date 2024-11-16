@@ -7,6 +7,8 @@ export default function Search() {
 
   const [loading, setLoading] = useState(false);
   const [listing, setListing] = useState([]);
+  const [showMore ,setshowMore] = useState(false)
+
   const [filters, setFilters] = useState({
     searchTerm: "",
     type: "all",
@@ -53,6 +55,9 @@ export default function Search() {
       try {
         const res = await fetch(`/api/listing/getsearch?${urlParams.toString()}`);
         const data = await res.json();
+        if(data.length > 7){
+          setshowMore(true)
+        }
         setListing(data);
       } catch (error) {
         console.error("Error fetching listings:", error);
@@ -78,7 +83,22 @@ export default function Search() {
     navigate(`/search?${urlParams.toString()}`);
   };
   
-  
+  const onShowMoreClick = async()=>{
+    const numberOfListings = listing.length;
+
+    const startIndex = numberOfListings
+    const urlParams = new URLSearchParams(location.search)
+
+    urlParams.set('startIndex', startIndex)
+    const searchQuery = urlParams.toString()
+    const res = await fetch(`/api/listing/getsearch?${searchQuery}`)
+    const data = await res.json()
+
+    if(data.length < 8){
+      setshowMore(false)
+    }
+    setListing([...listing, ...data])
+  } 
 
   return (
     <main className="flex flex-col md:flex-row max-w-7xl mx-auto">
@@ -103,8 +123,8 @@ export default function Search() {
           {/* Type */}
           <div className="flex flex-row md:flex-col  gap-4">
             <label className="font-semibold">Type:</label>
-            {["all", "rent", "sale"].map((type) => (
-              <label key={type} className="flex items-center gap-2">
+            {["all", "rent", "sale"].map((type, index) => (
+              <label key={index} className="flex items-center gap-2">
                 <input
                   type="radio"
                   id={type}
@@ -171,9 +191,9 @@ export default function Search() {
         {loading ? (
           <p>Loading...</p>
         ) : listing.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
-            {listing.map((item) => (
-              <Link to={`/listing/${item._id}`} key={item.id} className="border rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-all duration-300">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 ">
+            {listing.map((item,index) => (
+              <Link to={`/listing/${item._id}`} key={index} className="border rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-all duration-300">
                 <div className="w-full h-[150px] overflow-hidden">
                     <img src={item.imageUrls[3]} className="w-full h-full object-cover hover:scale-110 transition-all duration-300"/>
                 </div>
@@ -201,7 +221,10 @@ export default function Search() {
                 </div>
               </Link>
             ))}
-          </div>
+            <div className="">
+              {showMore && <button onClick={onShowMoreClick} onChange={()=>{setshowMore()}} className="text-center text-green-700 hover:underline font-semibold py-5">Show more</button>}
+            </div>
+            </div>
         ) : (
           <p>No listings found.</p>
         )}
