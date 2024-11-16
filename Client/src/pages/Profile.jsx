@@ -8,6 +8,8 @@ function Profile() {
   const fileRef = useRef(null);
   const {loading, currentUser ,error} = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const [showlistingerror, setshowlistingError] = useState(false)
+  const [userlisting, setuserlisting] = useState([])
 
   const [formData, setFormData] = useState({
     username: currentUser?.username || "",
@@ -140,11 +142,31 @@ function Profile() {
       }
     };
     
+
+    //listing get
+    const handleshowlisting = async () =>{
+      try {
+        setshowlistingError(false)
+        const res = await fetch(`/api/user/listing/${currentUser._id}`)
+        const data = await res.json()
+        if(data.success === false){
+          setshowlistingError(true)
+        }
+        setuserlisting(data)
+        setshowlistingError(false)
+      } catch (error) {
+        console.log(error.message);
+        setshowlistingError(true)
+      }
+    }
+    
+    console.log(userlisting);
+    
     
 
   return (
-    <div className="max-w-6xl mx-auto flex justify-between items-center flex-col sm:flex-row sm:mt-4">
-      <div className="flex-1 w-[90%] sm:w-full">
+    <div className="max-w-6xl mx-auto flex justify-between items-start flex-col sm:flex-row sm:mt-4">
+      <div className="flex-1 w-[90%] sm:w-full sm:mt-20">
         <img
           src={profile}
           alt="profile"
@@ -205,6 +227,30 @@ function Profile() {
             Delete Account
           </span>
           <span className="text-red-700 cursor-pointer" onClick={() => handleLogout(currentUser?._id)}>Sign Out</span>
+        </div>
+        <div className="">
+          <button onClick={handleshowlisting} className="text-green-700 w-full text-center mx-auto">Listings</button>
+          <p className="text-red-700 mt-5">{showlistingerror  ? 'Error showing listing' : ''}</p>
+          {
+            userlisting && userlisting.length > 0 && 
+            <div className="py-5">
+              <p className="text-center my-5 text-2xl">Your Listing</p>
+             {  userlisting.map((listing, index)=>(
+                <div key={index} className="border rounded-lg p-3 flex border-sky-400 gap-2 items-center justify-between mt-2">
+                  <Link to={`/listing/${listing._id}`} className="flex gap-4 items-center">
+                    <div className="flex gap-4 items-center">
+                      <img src={listing.imageUrls[0]} alt="image" className="h-16 w-16 object-contain rounded-lg "/>
+                      <p className="text-slate-700 font-semibold hover:underline truncate">{listing.name}</p>
+                    </div>
+                  </Link>
+                  <div className="flex flex-col items-center gap-1">
+                      <button className="text-green-700 hover:font-semibold">Edit</button>
+                      <button className="text-red-700 hover:font-semibold">Delete</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          }
         </div>
       </div>
     </div>
