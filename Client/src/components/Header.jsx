@@ -62,7 +62,7 @@ export default function Header() {
                 {
                     currentUser ? (
                         <Link to={'/profile'}>
-                            <img src={currentUser.avatar} alt="profile image" className="h-8 w-8 object-cover rounded-full"/>
+                            <img src={currentUser.avatar} alt="profile image" className="h-10 w-10 object-cover rounded-full"/>
                         </Link>
                     ):(
                         <Link to={'/sign-in'}>
