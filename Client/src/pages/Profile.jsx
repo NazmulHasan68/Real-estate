@@ -161,7 +161,6 @@ function Profile() {
       }
     }
     
-    
   // Delete listing
   const handleDeleteListing = async (id) => {
   try {
@@ -182,7 +181,9 @@ function Profile() {
   } catch (error) {
     console.error('Error deleting listing:', error.message);
   }
-};
+  };
+
+
 
 
 
@@ -266,7 +267,9 @@ function Profile() {
                     </div>
                   </Link>
                   <div className="flex flex-col items-center gap-1">
-                      <button className="text-green-700 hover:font-semibold">Edit</button>
+                      <Link to={`/update-listing/${listing._id}`}>
+                        <button className="text-green-700 hover:font-semibold">Edit</button>
+                      </Link>
                       <button className="text-red-700 hover:font-semibold" onClick={()=>handleDeleteListing(listing._id)}>Delete</button>
                   </div>
                 </div>
